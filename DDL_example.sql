@@ -46,7 +46,7 @@ CREATE USER 'school_developer'@'localhost' IDENTIFIED BY 'school123';
 
 -- 축구 경기(football) 데이터베이스 
 
--- 참가팀(team) [국가명(nation), 조(group), 감독(manager), 피파랭킹(lanking)]
+-- 참가팀(team) [국가명(nation), 조(seed), 감독(manager), 피파랭킹(lanking)]
 -- 선수(player) [이름(name), 생년월일(birth), 포지션(position), 등번호(uniform_number), 국가(country)]
 -- 경기장(stadium) [이름(name), 주소(address), 좌석(seats)]
 -- 심판(referee) [이름(name), 생년월일(birth), 국가(country), 포지션(position)]
