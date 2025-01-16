@@ -71,3 +71,35 @@ WHERE transaction_type <> '구매';
 
 SELECT * FROM transaction
 WHERE breakdown != '영양제';
+
+-- < : 좌항이 우항보다 작으면 true
+-- <= : 좌항이 우항보다 작거나 같으면 true
+SELECT * FROM transaction
+WHERE amount < 70000;
+
+SELECT * FROM transaction
+WHERE amount <= 70000;
+
+-- > : 좌항이 우항보다 크면 true
+-- >= : 좌항이 우항보다 크거나 같으면 true
+SELECT * FROM transaction
+WHERE amount > 70000;
+
+SELECT * FROM transaction
+WHERE amount >= 70000;
+
+ALTER TABLE transaction ADD complete BOOLEAN;
+SELECT * FROM transaction;
+
+UPDATE transaction SET complete = true
+WHERE (transaction_number % 3) = 1;
+
+UPDATE transaction SET complete = false
+WHERE (transaction_number % 3) = 2;
+
+UPDATE transaction SET note = null
+WHERE transaction_number = 6;
+
+-- <=> : 좌항과 우항이 모두 null이면 true
+SELECT * FROM transaction
+WHERE note <=> complete;
