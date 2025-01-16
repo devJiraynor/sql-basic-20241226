@@ -44,7 +44,7 @@ CREATE USER 'developer'@'%' IDENTIFIED BY 'P!ssw0rd';
 CREATE USER 'guest'@'192.168.1.101' IDENTIFIED BY 'qwer1234';
 
 -- DROP : 데이터 구조(스키마)를 삭제할 때 사용하는 명령어
--- DROP 구조조이름(스키마명)
+-- DROP 구조이름(스키마명)
 
 -- 사용자 삭제 
 DROP USER 'guest'@'192.168.1.101';
