@@ -103,3 +103,76 @@ WHERE transaction_number = 6;
 -- <=> : 좌항과 우항이 모두 null이면 true
 SELECT * FROM transaction
 WHERE note <=> complete;
+
+-- IS : 좌항이 우항과 같으면 true (키워드)
+-- IS NOT : 좌항이 우항과 다르면 true (키워드)
+SELECT * FROM transaction
+WHERE complete IS TRUE;
+
+SELECT * FROM transaction
+WHERE complete IS NOT NULL;
+
+-- BETWEEN min AND max : 좌항이 min 보다 크거나 같으면서 max 보다 작거나 같으면 true
+-- NOT BETWEEN min AND max : 좌항이 min 보다 적거나 max 보다 크면 true
+SELECT * FROM transaction
+WHERE transaction_date BETWEEN '2025-01-18' AND '2025-01-22';
+
+SELECT * FROM transaction
+WHERE amount NOT BETWEEN 70000 AND 200000;
+
+-- IN() : 주어진 리스트 중에 하나라도 일치하면 true
+-- NOT IN() : 주어진 리스트 중에 하나라도 일치하지 않으면 true
+SELECT * FROM transaction
+WHERE breakdown IN('영양제', '의약외품');
+
+-- 논리 연산자
+
+-- AND, && : 좌항과 우항이 모두 true이면 true
+SELECT * FROM transaction
+WHERE transaction_type = '구매' AND amount > 100000;
+
+-- OR, || : 좌항과 우항 중 하나라도 true이면 true
+SELECT * FROM transaction
+WHERE transaction_date >= '2025-01-20' OR breakdown = '기타자재';
+
+-- XOR : 좌항과 우항이 서로 다르면 true
+SELECT * FROM transaction
+-- WHERE transaction_date >= '2025-01-20' XOR breakdown = '기타자재';
+WHERE transaction_date >= '2025-01-20' AND breakdown != '기타자재'
+OR transaction_date < '2025-01-20' AND breakdown = '기타자재';
+
+-- NOT, ! : 우항이 true면 false, false면 true
+SELECT * FROM transaction
+WHERE NOT transaction_type = '구매';
+
+-- LIKE 연산자 : 문자열을 패턴을 기준으로 비교하고자 할때 사용
+-- _ : 임의의 한 문자 표현
+-- % : 임의의 문자 표현 (0 ~ 무한대)
+SELECT * FROM transaction
+WHERE transaction_date LIKE '2025-01-__';
+
+SELECT * FROM transaction
+WHERE transaction_date LIKE '2025-01-%';
+
+SELECT * FROM transaction
+WHERE breakdown LIKE '의_';
+
+SELECT * FROM transaction
+WHERE breakdown LIKE '의%';
+
+-- 정렬
+-- ORDER BY : 조회 결과를 특정 컬럼 기준으로 정렬
+-- ASC: 오름차순 정렬 / DESC: 내림차순 정렬
+SELECT * FROM transaction
+ORDER BY amount ASC;
+
+SELECT * FROM transaction
+ORDER BY amount DESC;
+
+SELECT * FROM transaction
+ORDER BY transaction_type, amount DESC;
+
+-- 중복제거
+-- DISTINCT : SELECT 결과 테이블에서 컬럼 조합의 중복을 제거함
+SELECT DISTINCT transaction_type FROM transaction;
+SELECT DISTINCT transaction_type, breakdown FROM transaction;
