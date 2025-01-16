@@ -31,3 +31,28 @@ SELECT example_column2 FROM example_table;
 -- 3. 레코드 선택 조회
 -- SELECT 조회할컬럼, ... FROM 테이블명 WHERE 조건;
 SELECT * FROM example_table WHERE column1 IS NULL;
+
+-- UPDATE : 테이블에서 레코드를 수정할 때 사용하는 명령어
+-- UPDATE 테이블명 SET 컬러명 = 변경할데이터, ... WHERE 조건;
+UPDATE example_table SET column1 = 'B';
+UPDATE example_table SET column1 = 'C' WHERE example_column2 = 'B';
+
+-- DELETE : 테이블에서 레코드를 삭제할 때 사용하는 명령어
+-- DELETE FROM 테이블명 WHERE 조건;
+DELETE FROM example_table WHERE column1 = 'C';
+DELETE FROM example_table;
+
+-- DROP TABLE : DDL 테이블 구조 전체를 제거
+-- TRUNCATE TABLE : DDL 테이블 구조만 남기고 상태를 초기화
+-- DELETE FROM : DML 테이블 레코드만 제거
+TRUNCATE TABLE example_table;
+
+CREATE TABLE auto_table (
+    idx INT PRIMARY KEY AUTO_INCREMENT,
+    num INT
+);
+
+INSERT INTO auto_table (num) VALUES (0);
+SELECT * FROM auto_table;
+DELETE FROM auto_table;
+TRUNCATE TABLE auto_table;
