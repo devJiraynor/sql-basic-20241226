@@ -56,3 +56,7 @@ INSERT INTO auto_table (num) VALUES (0);
 SELECT * FROM auto_table;
 DELETE FROM auto_table;
 TRUNCATE TABLE auto_table;
+
+-- INSERT INTO SELECT : 삽입 작업시에 조회 결과를 사용하여 삽입
+INSERT INTO example_table
+SELECT * FROM example_table WHERE column1 IS NULL;
