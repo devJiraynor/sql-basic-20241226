@@ -56,3 +56,90 @@ SELECT
     age '사원 나이',
     department_code '부서 코드'
 FROM employee e;
+
+-- JOIN : 두 개 이상의 테이블을 특정 조건에 따라 조합하여 결과를 조회하고자 할때 사용하는 명령어
+
+-- INNER JOIN : 두 테이블에서 조건이 일치하는 레코드만 반환
+-- SELECT column, ... FROM 기준테이블 INNER JOIN 조합할테이블 ON 조인조건
+SELECT 
+    E.employee_number '사원 번호',
+    E.name '사원 이름',
+    E.age '사원 나이',
+    D.department_code '부서 코드',
+    D.name '부서 이름',
+    D.tel_number '부서 전화번호'
+FROM employee E INNER JOIN department D
+ON E.department_code = D.department_code;
+
+-- JOIN이 포함된 WHERE 작업은 JOIN 결과에서 조건을 검사함
+SELECT 
+    E.employee_number '사원 번호',
+    E.name '사원 이름',
+    E.age '사원 나이',
+    D.department_code '부서 코드',
+    D.name '부서 이름',
+    D.tel_number '부서 전화번호'
+FROM employee E INNER JOIN department D
+ON E.department_code = D.department_code
+WHERE E.age < 20;
+
+-- LEFT OUTER JOIN (LEFT JOIN) : 기준 테이블의 모든 레코드와 조합할 테이블 중 조건에 일치하는 레코드만 반환
+-- 만약, 조합할 테이블에 조건에 부합하는 레코드가 존재하지 않으면 null로 채움
+SELECT 
+    E.employee_number '사원 번호',
+    E.name '사원 이름',
+    E.age '사원 나이',
+    D.department_code '부서 코드',
+    D.name '부서 이름',
+    D.tel_number '부서 전화번호'
+FROM employee E LEFT JOIN department D
+ON E.department_code = D.department_code;
+
+-- RIGHT OUTER JOIN (RIGHT JOIN) : 조합할 테이블의 모든 레코드와 기준 테이블 중 조건에 일치하는 레코드만 반환
+-- 만약 기준 테이블에 조건에 일치하는 레코드가 존재하지 않으면 null로 반환
+SELECT 
+    E.employee_number '사원 번호',
+    E.name '사원 이름',
+    E.age '사원 나이',
+    D.department_code '부서 코드',
+    D.name '부서 이름',
+    D.tel_number '부서 전화번호'
+FROM employee E RIGHT JOIN department D
+ON E.department_code = D.department_code;
+
+-- FULL OUTER JOIN (FULL JOIN) : 기준 테이블의 모든 레코드와 조합할 테이블의 모든 레코드를 반환
+-- 만약 기준 테이블 혹은 조합할 테이블에 조건에 부합하는 레코드가 존재하지 않으면 null로 반환
+-- MySQL에서는 FULL OUTER JOIN을 문법상으로 지원하지 않음
+-- FULL JOIN = LEFT JOIN + RIGHT JOIN
+SELECT 
+    E.employee_number '사원 번호',
+    E.name '사원 이름',
+    E.age '사원 나이',
+    D.department_code '부서 코드',
+    D.name '부서 이름',
+    D.tel_number '부서 전화번호'
+FROM employee E LEFT JOIN department D
+ON E.department_code = D.department_code
+UNION
+SELECT 
+    E.employee_number '사원 번호',
+    E.name '사원 이름',
+    E.age '사원 나이',
+    D.department_code '부서 코드',
+    D.name '부서 이름',
+    D.tel_number '부서 전화번호'
+FROM employee E RIGHT JOIN department D
+ON E.department_code = D.department_code;
+
+-- CROSS JOIN : 기준 테이블의 각 레코드를 조합할 테이블의 각 레코드와 조합하여 반환
+-- CROSS JOIN 결과 레코드 수 = 기준 테이블 레코드 수 * 조합할 테이블의 레코드 수
+-- CROSS JOIN에서는 ON 조건절이 필요 없음
+SELECT *
+FROM employee E CROSS JOIN department D;
+
+-- MySQL에서 기본 조인이 CROSS JOIN 임
+SELECT *
+FROM employee E JOIN department D;
+
+SELECT *
+FROM employee E, department D;
