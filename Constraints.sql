@@ -103,3 +103,65 @@ CREATE TABLE fK_table (
     CONSTRAINT fk_table_fk FOREIGN KEY (fk_column)
     REFERENCES pk_table(primary_column)
 );
+
+SELECT * FROM pk_table;
+SELECT * FROM fk_table;
+
+-- FOREIGN KEY 제약조건이 지정된 컬럼은 참조하고 있는 테이블 컬럼에 값이 존재하지 않으면 삽입, 수정이 불가능
+-- Error Code : 1452
+-- 단, 해당 컬럼이 NOT NULL이 아니라면 null은 지정할 수 있음
+INSERT INTO fk_table VALUES (1, 0);
+INSERT INTO fk_table VALUES (1, null);
+UPDATE fk_table SET fk_column = 2 WHERE pk_column = 1;
+
+-- FOREIGN KEY 제약조건으로 참조해주는 테이블 컬럼을 수정, 삭제 작업이 불가능
+-- Error Code: 1451
+UPDATE pk_table SET primary_column = 2 WHERE primary_column = 1;
+DELETE FROM pk_table;
+
+-- ON UPDATE / ON DELETE 옵션
+-- ON UPDATE : 부모 테이블의 기본키가 변경될 때 동작
+-- ON DELETE : 부모 테이블의 기본키가 삭제될 때 동작
+
+-- RESTRICT : 부모 테이블의 기본키의 수정 및 삭제를 불가능하게 함 (기본값)
+-- CASCADE : 부모 테이블의 기본키가 삭제 또는 수정된다면, 자식 테이블의 외래키도 같이 삭제 또는 수정됨
+-- SET NULL : 부모 테이블의 기본키가 삭제 또는 수정된다면, 자식 테이블의 외래키는 null로 지정
+CREATE TABLE optional_fk_table (
+    pk_column INT PRIMARY KEY,
+    fk_column INT,
+    FOREIGN KEY (fk_column) 
+    REFERENCES pk_table (primary_column)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL
+);
+
+INSERT INTO optional_fk_table VALUES (1, 1);
+SELECT * FROM optional_fk_table;
+SELECT * FROM pk_table;
+DROP TABLE fk_table;
+UPDATE pk_table SET primary_column = 2 WHERE primary_column = 1;
+DELETE FROM pk_table;
+
+-- CHECK 제약조건 : 특정 컬럼에 값을 제한하는 제약
+-- [자기 자신 테이블 INSERT, UPDATE에 영향을 미침]
+CREATE TABLE check_table (
+    check_column VARCHAR(5) CHECK(check_column IN('남', '여'))
+);
+
+-- CHECK 제약조건이 지정된 컬럼에 조건에 부합하지않는 값으로 삽입, 수정 불가능
+-- Error Code : 3819
+INSERT INTO check_table VALUES ('남자');
+INSERT INTO check_table VALUES ('남');
+UPDATE check_table SET check_column = '여자';
+
+-- DEFAULT 제약조건 : 특정 컬럼에 삽입시 값이 지정되지 않으면 기본값을 지정하는 제약
+-- [자기 자신 테이블의 INSERT에 영향을 미침]
+CREATE TABLE default_table (
+    -- AUTO_INCREMENT: 기본키에서 데이터타입이 정수형일 때 값을 1씩 증가하는 값으로 자동 지정
+    ai_column INT PRIMARY KEY AUTO_INCREMENT,
+    default_column INT DEFAULT 99,
+    column1 INT
+);
+
+INSERT INTO default_table (column1) VALUES (1);
+SELECT * FROM default_table;
