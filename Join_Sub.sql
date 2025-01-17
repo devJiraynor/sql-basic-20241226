@@ -143,3 +143,21 @@ FROM employee E JOIN department D;
 
 SELECT *
 FROM employee E, department D;
+
+-- 부서코드가 A인 사원에 대해 사번, 사원의 이름, 부서명을 조회하시오.
+SELECT  
+    E.employee_number '사번',
+    E.name '사원 이름',
+    D.name '부서명'
+FROM employee E INNER JOIN department D
+ON E.department_code = D.department_code
+WHERE E.department_code = 'A';
+
+-- 부서명이 '영업부'인 사원에 대해 사번, 이름, 나이를 조회하시오.
+SELECT 
+    E.employee_number '사번',
+    E.name '이름',
+    E.age '나이'
+FROM employee E RIGHT JOIN department D
+ON E.department_code = D.department_code
+WHERE D.name = '영업부';
