@@ -211,3 +211,5 @@ FROM employee E INNER JOIN (
     SELECT * FROM department WHERE name = '영업부'
 ) D
 ON E.department_code = D.department_code;
+
+-- 서브쿼리를 FROM 절에서 사용할 땐 3개 이상의 테이블을 조인해서 결과를 얻고자 할때 아주 유용하게 사용됨
