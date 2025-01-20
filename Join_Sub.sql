@@ -161,3 +161,46 @@ SELECT
 FROM employee E RIGHT JOIN department D
 ON E.department_code = D.department_code
 WHERE D.name = '영업부';
+
+-- 서브쿼리 : 쿼리 내부에 존재하는 또 다른 쿼리, 쿼리 결과를 조건이나 테이블로 사용할 수 있도록 함
+
+-- WHERE 절에서 서브쿼리 : 조회 결과를 조건으로 사용하여 조건을 동적으로 지정할 수 있도록 함
+-- WHERE 절에서 비교 연산등으로 사용할 때 서브쿼리의 결과 컬럼 수 및 레코드 수 주의
+SELECT employee_number, name, age
+FROM employee
+WHERE department_code = (
+    SELECT department_code 
+    FROM department 
+    WHERE name = '영업부'
+);
+
+-- WHERE 조건절에서 서브쿼리를 사용할땐 해당 일반적으로 해당 서브쿼리의 결과 컬럼은 1개가 와야함
+SELECT employee_number, name, age
+FROM employee
+WHERE department_code = (
+    SELECT * 
+    FROM department 
+    WHERE name = '영업부'
+);
+
+-- WHERE 조건절에서 서브쿼리를 사용할 땐 연산자에 따라 레코드의 개수를 잘 확인해야함
+SELECT employee_number, name, age
+FROM employee
+WHERE department_code = (
+    SELECT department_code 
+    FROM department
+);
+
+SELECT employee_number, name, age
+FROM employee
+WHERE department_code IN (
+    SELECT department_code 
+    FROM department
+);
+
+SELECT employee_number, name, age
+FROM employee
+WHERE department_code IN (
+    SELECT * 
+    FROM department
+);
