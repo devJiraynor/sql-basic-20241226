@@ -253,7 +253,27 @@ LEFT JOIN (
 ) SUB
 ON C.class_code = SUB.class_code;
 
--- 7. 평균 점수(수학 + 국어 + 영어)가 80점 이상인 
+-- 7. 평균 점수(수학 + 국어 + 영어)가 90점 이상인 
 -- 학생이 수업중인 교실의 층, 좌석수를 구하는 쿼리를 작성하시오.
-SELECT *
-FROM class_regist;
+SELECT 
+    floor '층',
+    seats '좌석 수'
+FROM class_room
+WHERE class_room_number IN (
+    SELECT DISTINCT class_room
+    FROM class
+    WHERE class_code IN (
+        SELECT DISTINCT class_code
+        FROM class_regist
+        WHERE student_number IN (
+            SELECT student_number
+            FROM (SELECT 
+                    student_number,
+                    AVG(score) 'avg'
+                FROM class_regist
+                GROUP BY student_number
+                HAVING avg >= 90
+                ) SUB
+            )
+    )
+);
