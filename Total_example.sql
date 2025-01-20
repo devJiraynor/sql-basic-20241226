@@ -122,3 +122,115 @@ INSERT INTO teacher VALUES ('2010010102', '이도', '부산광역시 부산진�
 INSERT INTO teacher VALUES ('2010010103', '이향', '부산광역시 강서구', '010-2222-5555', '교생');
 
 SELECT * FROM teacher;
+
+INSERT INTO class_room (floor, seats) VALUES (1, 20);
+INSERT INTO class_room (floor, seats) VALUES (1, 20);
+INSERT INTO class_room (floor, seats) VALUES (2, 30);
+INSERT INTO class_room (floor, seats) VALUES (3, 30);
+
+SELECT * FROM class_room;
+
+INSERT INTO class VALUES ('KR1', '국어', 3, '2010010101');
+INSERT INTO class VALUES ('KR2', '국어', 1, '2010010103');
+INSERT INTO class VALUES ('MT1', '수학', 2, '2010010102');
+INSERT INTO class VALUES ('MT2', '수학', 1, '2010010103');
+INSERT INTO class VALUES ('EN1', '영어', 2, '2010010101');
+INSERT INTO class VALUES ('EN2', '영어', 3, '2010010102');
+
+SELECT * FROM class;
+
+INSERT INTO class_regist VALUES (25001, 'KR1', 100);
+INSERT INTO class_regist VALUES (25001, 'MT2', 50);
+INSERT INTO class_regist VALUES (25001, 'EN1', 70);
+INSERT INTO class_regist VALUES (25002, 'KR2', 80);
+INSERT INTO class_regist VALUES (25002, 'MT1', 100);
+INSERT INTO class_regist VALUES (25002, 'EN2', 100);
+INSERT INTO class_regist VALUES (25003, 'KR2', 40);
+INSERT INTO class_regist VALUES (25003, 'MT2', 80);
+INSERT INTO class_regist VALUES (25003, 'EN2', 65);
+INSERT INTO class_regist VALUES (25004, 'KR1', 70);
+INSERT INTO class_regist VALUES (25004, 'MT1', 80);
+INSERT INTO class_regist VALUES (25004, 'EN1', 40);
+INSERT INTO class_regist VALUES (25005, 'KR1', 100);
+INSERT INTO class_regist VALUES (25005, 'MT1', 80);
+INSERT INTO class_regist VALUES (25005, 'EN2', 60);
+INSERT INTO class_regist VALUES (25006, 'KR2', 60);
+INSERT INTO class_regist VALUES (25006, 'MT1', 80);
+INSERT INTO class_regist VALUES (25006, 'EN1', 100);
+INSERT INTO class_regist VALUES (25007, 'KR2', 75);
+INSERT INTO class_regist VALUES (25007, 'MT2', 95);
+INSERT INTO class_regist VALUES (25007, 'EN1', 75);
+INSERT INTO class_regist VALUES (25008, 'KR1', 95);
+INSERT INTO class_regist VALUES (25008, 'MT2', 75);
+INSERT INTO class_regist VALUES (25008, 'EN2', 95);
+INSERT INTO class_regist VALUES (25009, 'KR1', 100);
+INSERT INTO class_regist VALUES (25009, 'MT1', 100);
+INSERT INTO class_regist VALUES (25009, 'EN1', 100);
+INSERT INTO class_regist VALUES (25010, 'KR2', 70);
+INSERT INTO class_regist VALUES (25010, 'MT2', 70);
+INSERT INTO class_regist VALUES (25010, 'EN2', 80);
+
+SELECT * FROM class_regist;
+
+-- 1. 수업의 수업코드, 수업이름, 담당교사 이름, 담당교사 직급을
+-- 조회하는 쿼리문을 작성하시오.
+SELECT 
+    C.class_code '수업 코드',
+    C.name '수업 이름',
+    T.name '담당교사 이름',
+    T.position '담당교사 직급'
+FROM class C LEFT JOIN teacher T
+ON C.charge_teacher = T.teacher_number;
+
+-- 2. MT1 수업을 수강하는 학생의 이름, 주소, 전화번호, 점수를 
+-- 조회하는 쿼리문을 작성하시오.
+SELECT 
+    S.name '이름',
+    S.address '주소',
+    S.tel_number '전화번호',
+    CR.score '점수'
+FROM student S INNER JOIN class_regist CR
+ON S.student_number = CR.student_number
+WHERE CR.class_code = 'MT1';
+
+-- 3. 부산진구에 거주하고 있는 교사가 강의중인 수업의 수업 코드와 
+-- 수업 이름을 조회하는 쿼리를 작성하시오. 
+SELECT 
+    class_code '수업 코드',
+    name '수업 이름'
+FROM class
+WHERE charge_teacher IN (
+    SELECT teacher_number
+    FROM teacher
+    WHERE address LIKE '%부산진구%'
+);
+
+-- 4. 수업 코드별 점수의 평균, 최대, 최소 값을 구하는 쿼리문을 작성하시오.
+SELECT 
+    class_code '수업 코드',
+    AVG(score) '평균',
+    MAX(score) '최대',
+    MIN(score) '최소'
+FROM class_regist
+GROUP BY class_code;
+
+-- 5. 수업의 평균 점수가 80점 이상인 수업의 수업 이름과 
+-- 담당 교사의 이름을 조회하는 쿼리문을 작성하시오.
+SELECT 
+    C.name '수업 이름',
+    T.name '교사 이름'
+FROM class C LEFT JOIN teacher T
+ON C.charge_teacher = T.teacher_number
+WHERE C.class_code IN (
+    SELECT class_code
+    FROM 
+        (SELECT 
+            class_code, 
+            AVG(score) 'avg'
+        FROM class_regist
+        GROUP BY class_code
+        HAVING avg >= 80) SUB
+);
+
+-- 6. 수업의 수업코드, 수업이름, 담당교사 이름, 담당교사 직급, 
+-- 최저 점수, 최대 점수를 조회하는 쿼리문을 작성하시오.
