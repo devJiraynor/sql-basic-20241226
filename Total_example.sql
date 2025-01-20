@@ -234,3 +234,26 @@ WHERE C.class_code IN (
 
 -- 6. 수업의 수업코드, 수업이름, 담당교사 이름, 담당교사 직급, 
 -- 최저 점수, 최대 점수를 조회하는 쿼리문을 작성하시오.
+SELECT 
+    C.class_code '수업 코드',
+    C.name '수업 이름',
+    T.name '담당교사 이름',
+    T.position '담당교사 직급',
+    SUB.min '최저 점수',
+    SUB.max '최대 점수'
+FROM class C 
+LEFT JOIN teacher T ON C.charge_teacher = T.teacher_number
+LEFT JOIN (
+    SELECT 
+        class_code, 
+        MIN(score) 'min',
+        MAX(score) 'max'
+    FROM class_regist
+    GROUP BY class_code
+) SUB
+ON C.class_code = SUB.class_code;
+
+-- 7. 평균 점수(수학 + 국어 + 영어)가 80점 이상인 
+-- 학생이 수업중인 교실의 층, 좌석수를 구하는 쿼리를 작성하시오.
+SELECT *
+FROM class_regist;
