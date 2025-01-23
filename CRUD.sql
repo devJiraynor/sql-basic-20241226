@@ -19,4 +19,14 @@ CREATE TABLE board (
     CONSTRAINT board_writer_fk FOREIGN KEY (writer_id) REFERENCES user (id)
 );
 
+CREATE VIEW board_view AS 
+SELECT 
+  B.board_number board_number,
+  B.title title,
+  U.nickname writer_nickname,
+  B.write_date write_date,
+  B.contents contents
+FROM board B INNER JOIN user U
+ON B.writer_id = U.id;
+
 
