@@ -29,4 +29,19 @@ SELECT
 FROM board B INNER JOIN user U
 ON B.writer_id = U.id;
 
+CREATE TABLE comment (
+  comment_number INT NOT NULL UNIQUE AUTO_INCREMENT,
+  board_number INT NOT NULL,     
+  writer_id VARCHAR(20) NOT NULL, 
+  conents TEXT NOT NULL,             
+  write_datetime DATETIME NOT NULL,  
+  status BOOLEAN NOT NULL,
+  parent_comment INT,
+
+  CONSTRAINT comment_pk PRIMARY KEY (comment_number),
+  CONSTRAINT comment_board_fk FOREIGN KEY (board_number) REFERENCES board (board_number),
+  CONSTRAINT comment_user_fk FOREIGN KEY (writer_id) REFERENCES user (id),
+  CONSTRAINT parent_comment_fk FOREIGN KEY (parent_comment) REFERENCES comment (comment_number)
+);
+
 
